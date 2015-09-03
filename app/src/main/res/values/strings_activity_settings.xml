@@ -1,0 +1,14 @@
+<resources>
+    <string name="title_activity_settings">Settings</string>
+    <string name="pref_sort">Sort By</string>
+    <string name="save">Save</string>
+    <string-array name="sort_options_titles">
+        <item name = "most_popular">By Most Popular</item>
+        <item name = "highest_rated">By Highest-Rated</item>
+    </string-array>
+    <string-array name="sort_options_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+</resources>

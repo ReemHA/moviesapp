@@ -1,4 +1,4 @@
-package com.example.user.movieproject;
+package com.example.user.movieproject.Controller;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.user.movieproject.Controller.SettingsActivity;
+import com.example.user.movieproject.R;
 import com.squareup.picasso.Picasso;
 
 public class DetailActivity extends AppCompatActivity {

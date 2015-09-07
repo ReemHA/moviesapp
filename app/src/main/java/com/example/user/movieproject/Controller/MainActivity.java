@@ -1,10 +1,12 @@
-package com.example.user.movieproject;
+package com.example.user.movieproject.Controller;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.example.user.movieproject.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -14,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         //getActionBar().setDisplayHomeAsUpEnabled(true);
         if(savedInstanceState != null){
-            getSupportFragmentManager().beginTransaction().add(R.id.fragment, new MainActivityFragment()).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.fragment, new MovieGridFragment()).commit();
         }
     }
 

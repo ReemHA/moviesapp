@@ -16,11 +16,11 @@ import java.util.ArrayList;
  * Created by USER on 8/22/2015.
  */
 
-public class CustomArrayAdapter extends ArrayAdapter<Movie> {
+public class MovieGridCustomAdapter extends ArrayAdapter<Movie> {
     Context context;
     int resourceId;
     ArrayList<Movie> movies;
-    public CustomArrayAdapter(Context context, int layoutResourceId, ArrayList<Movie> movies){
+    public MovieGridCustomAdapter(Context context, int layoutResourceId, ArrayList<Movie> movies){
         super(context, layoutResourceId, movies);
         this.context=context;
         this.resourceId = layoutResourceId;

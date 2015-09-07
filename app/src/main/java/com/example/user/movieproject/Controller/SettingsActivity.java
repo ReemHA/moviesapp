@@ -1,4 +1,4 @@
-package com.example.user.movieproject;
+package com.example.user.movieproject.Controller;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -7,6 +7,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
+
+import com.example.user.movieproject.R;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.example.user.movieproject;
+package com.example.user.movieproject.Model;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.user.movieproject.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

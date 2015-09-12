@@ -16,8 +16,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import com.example.user.movieproject.Movie;
-import com.example.user.movieproject.MovieGridCustomAdapter;
+import com.example.user.movieproject.Model.Movie;
+import com.example.user.movieproject.Model.MovieGridCustomAdapter;
 import com.example.user.movieproject.R;
 
 import org.json.JSONArray;
@@ -34,6 +34,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
+
 /**
  * A placeholder fragment containing a simple view.
  */
@@ -44,7 +45,7 @@ public class MovieGridFragment extends Fragment {
     private GridView grid;
     private static String storedPreferences;
     private static String url;
-    private String API_KEY;
+    private static final String API_KEY = "0bed95c67895bbde6f8d00e7e464c50a";
     public MovieGridFragment() {
     }
 
@@ -68,9 +69,27 @@ public class MovieGridFragment extends Fragment {
 
     @Override
     public void onStart() {
+        super.onStart();
+        Log.d("update_fn", "exc");
         MovieGridFragmentTask movieFragmentTask = new MovieGridFragmentTask();
         movieFragmentTask.execute(url);
-        super.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("update_fn", "exc");
+        MovieGridFragmentTask movieFragmentTask = new MovieGridFragmentTask();
+        movieFragmentTask.execute(url);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        MovieGridFragmentTask movieFragmentTask = new MovieGridFragmentTask();
+        Log.d("onFn", "stop");
+        movieFragmentTask.execute(url);
+
     }
 
     @Override

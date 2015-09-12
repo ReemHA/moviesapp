@@ -4,7 +4,6 @@
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -25,8 +24,13 @@
         </activity>
         <activity
             android:name=".Controller.DetailActivity"
-            android:label="@string/title_activity_detail" >
+            android:label="@string/title_activity_detail"
+            android:parentActivityName=".Controller.MainActivity">
         </activity>
+        <!--<provider
+            android:authorities="com.example.user.movieproject"
+            android:name=".Model.MovieDbProvider"/>
+-->
     </application>
 
 </manifest>

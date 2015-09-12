@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.user.movieproject.Controller.SettingsActivity;
 import com.example.user.movieproject.R;
 import com.squareup.picasso.Picasso;
 
@@ -69,9 +68,10 @@ public class DetailActivity extends AppCompatActivity {
         }
 
         if(id == R.id.home){
-            finish();
+            this.finish();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
+
 }

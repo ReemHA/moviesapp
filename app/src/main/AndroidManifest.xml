@@ -29,7 +29,9 @@
             android:label="@string/title_activity_detail"
             android:parentActivityName=".controller.MainActivity">
         </activity>
-
+        <provider
+            android:authorities="com.example.user.movieproject"
+            android:name=".model.MovieDbProvider"/>
 
     </application>
 

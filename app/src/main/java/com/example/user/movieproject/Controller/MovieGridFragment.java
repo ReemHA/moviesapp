@@ -45,7 +45,7 @@ public class MovieGridFragment extends Fragment {
     private GridView grid;
     private static String storedPreferences;
     private static String url;
-    private static final String API_KEY = "0bed95c67895bbde6f8d00e7e464c50a";
+    private static final String API_KEY = "YOUR API KEY";
     private MovieGridFragmentTask movieFragmentTask;
 
     public MovieGridFragment() {

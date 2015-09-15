@@ -1,4 +1,4 @@
-package com.example.user.movieproject.Controller;
+package com.example.user.movieproject.controller;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,8 +16,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import com.example.user.movieproject.Model.Movie;
-import com.example.user.movieproject.Model.MovieGridCustomAdapter;
+import com.example.user.movieproject.model.Movie;
+import com.example.user.movieproject.model.MovieGridCustomAdapter;
 import com.example.user.movieproject.R;
 
 import org.json.JSONArray;
@@ -46,6 +46,8 @@ public class MovieGridFragment extends Fragment {
     private static String storedPreferences;
     private static String url;
     private static final String API_KEY = "0bed95c67895bbde6f8d00e7e464c50a";
+    private MovieGridFragmentTask movieFragmentTask;
+
     public MovieGridFragment() {
     }
 
@@ -70,44 +72,22 @@ public class MovieGridFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        Log.d("update_fn", "exc");
-        MovieGridFragmentTask movieFragmentTask = new MovieGridFragmentTask();
-        movieFragmentTask.execute(url);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d("update_fn", "exc");
-        MovieGridFragmentTask movieFragmentTask = new MovieGridFragmentTask();
-        movieFragmentTask.execute(url);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        MovieGridFragmentTask movieFragmentTask = new MovieGridFragmentTask();
-        Log.d("onFn", "stop");
-        movieFragmentTask.execute(url);
-
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        SharedPreferences.OnSharedPreferenceChangeListener listener;
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         storedPreferences = preferences.getString("sort_method", "0");
-        MovieGridFragmentTask movieFragmentTask = new MovieGridFragmentTask();
         if(storedPreferences.equals("0")){
             url = "http://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key="+API_KEY;
         }else{
             url= "http://private-53fc-themoviedb.apiary-mock.com/3/movie/top_rated";
         }
-        grid = (GridView) rootView.findViewById(R.id.movies_grid);
+        MovieGridFragmentTask movieFragmentTask = new MovieGridFragmentTask();
         movieFragmentTask.execute(url);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        grid = (GridView) rootView.findViewById(R.id.movies_grid);
         grid.setOnItemClickListener(gridItemClickListener);
         return rootView;
     }
@@ -167,15 +147,9 @@ public class MovieGridFragment extends Fragment {
         }
         @Override
         protected void onPostExecute(ArrayList<Movie> movies) {
-            adapter = new MovieGridCustomAdapter(getActivity(), R.layout.movie_item, movies);
-            if(adapter == null){
-                Log.d("adaptertest","is null");
-            }else{
-                Log.d("adaptertest","is NOT null");
-
-            }
-            grid.setAdapter(adapter);
             super.onPostExecute(movies);
+            adapter = new MovieGridCustomAdapter(getActivity(), R.layout.movie_item, movies);
+            grid.setAdapter(adapter);
         }
 
 

@@ -1,4 +1,4 @@
-package com.example.user.movieproject.Model;
+package com.example.user.movieproject.model;
 
 import android.content.Context;
 import android.view.LayoutInflater;

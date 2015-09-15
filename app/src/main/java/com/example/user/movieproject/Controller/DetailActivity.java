@@ -1,4 +1,4 @@
-package com.example.user.movieproject.Controller;
+package com.example.user.movieproject.controller;
 
 import android.content.Intent;
 import android.os.Bundle;

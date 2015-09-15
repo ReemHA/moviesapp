@@ -1,4 +1,4 @@
-package com.example.user.movieproject.Model;
+package com.example.user.movieproject.model;
 public class Movie {
     private int id;
     private String title;

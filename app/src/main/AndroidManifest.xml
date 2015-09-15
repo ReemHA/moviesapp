@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".Controller.MainActivity"
+            android:name=".controller.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,18 +19,23 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Controller.SettingsActivity"
-            android:label="@string/title_activity_settings" >
+            android:name=".controller.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".controller.MainActivity"
+            >
         </activity>
         <activity
-            android:name=".Controller.DetailActivity"
+            android:name=".controller.DetailActivity"
             android:label="@string/title_activity_detail"
-            android:parentActivityName=".Controller.MainActivity">
+            android:parentActivityName=".controller.MainActivity">
         </activity>
-        <!--<provider
+        <provider
             android:authorities="com.example.user.movieproject"
-            android:name=".Model.MovieDbProvider"/>
--->
+            android:name=".model.MovieDbProvider"
+            android:exported="true"
+            android:readPermission="com.example.user.movieproject.READ"
+            />
+
     </application>
 
 </manifest>

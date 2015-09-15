@@ -1,4 +1,4 @@
-package com.example.user.movieproject.Controller;
+package com.example.user.movieproject.controller;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,9 +14,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //getActionBar().setDisplayHomeAsUpEnabled(true);
         if(savedInstanceState != null){
-            getSupportFragmentManager().beginTransaction().add(R.id.fragment, new MovieGridFragment()).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.fragment, new com.example.user.movieproject.controller.MovieGridFragment()).commit();
         }
     }
 
@@ -29,10 +28,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            startActivity(new Intent(this, SettingsActivity.class));
+            startActivity(new Intent(this, com.example.user.movieproject.controller.SettingsActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);

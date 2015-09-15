@@ -1,4 +1,4 @@
-package com.example.user.movieproject.Controller;
+package com.example.user.movieproject.controller;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -10,12 +10,12 @@ import android.preference.PreferenceFragment;
 
 import com.example.user.movieproject.R;
 
-import java.util.List;
-
 public class SettingsActivity extends PreferenceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getFragmentManager().beginTransaction().replace(android.R.id.content, new SortPreferenceFragment()).commit();
+
     }
 
     @Override
@@ -25,12 +25,6 @@ public class SettingsActivity extends PreferenceActivity {
     private static boolean isXLargeTablet(Context context) {
         return (context.getResources().getConfiguration().screenLayout
                 & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_XLARGE;
-    }
-
-    @Override
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public void onBuildHeaders(List<Header> target) {
-        loadHeadersFromResource(R.xml.pref_headers, target);
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)

@@ -1,7 +1,13 @@
 package com.example.user.movieproject.controller;
 
+import android.app.LoaderManager;
+import android.content.ContentResolver;
+import android.content.Context;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -16,9 +22,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import com.example.user.movieproject.model.Movie;
-import com.example.user.movieproject.model.MovieGridCustomAdapter;
 import com.example.user.movieproject.R;
+import com.example.user.movieproject.model.Movie;
+import com.example.user.movieproject.model.MovieContract;
+import com.example.user.movieproject.model.MovieGridCustomAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,19 +45,22 @@ import java.util.ArrayList;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MovieGridFragment extends Fragment {
-    private AsyncTask<Void, Void, ArrayList<Movie>> task;
-    private static String stream;
+public class MovieGridFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private static MovieGridCustomAdapter adapter;
     private GridView grid;
     private static String storedPreferences;
     private static String url;
     private static final String API_KEY = "YOUR API KEY";
-    private MovieGridFragmentTask movieFragmentTask;
-
+    private static final int MOVIE_LOADER = 0;
+    private static int pref;
     public MovieGridFragment() {
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -61,26 +71,10 @@ public class MovieGridFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if(id == R.id.action_refresh){
-            MovieGridFragmentTask movieFragmentTask = new MovieGridFragmentTask();
-            movieFragmentTask.execute(url);
-            Log.d("value", storedPreferences);
+            getSortPreference();
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        storedPreferences = preferences.getString("sort_method", "0");
-        if(storedPreferences.equals("0")){
-            url = "http://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key="+API_KEY;
-        }else{
-            url= "http://private-53fc-themoviedb.apiary-mock.com/3/movie/top_rated";
-        }
-        MovieGridFragmentTask movieFragmentTask = new MovieGridFragmentTask();
-        movieFragmentTask.execute(url);
     }
 
     @Override
@@ -89,15 +83,67 @@ public class MovieGridFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         grid = (GridView) rootView.findViewById(R.id.movies_grid);
         grid.setOnItemClickListener(gridItemClickListener);
+
+        //NEW CODE NEW CODE
+        adapter = new MovieGridCustomAdapter(getActivity(), R.layout.movie_item, null);
+        grid.setAdapter(adapter);
         return rootView;
     }
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        getLoaderManager().initLoader(MOVIE_LOADER, null, this);
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    private void getSortPreference(){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        storedPreferences = preferences.getString("sort_method", "0");
+        MovieGridFragmentTask movieFragmentTask = new MovieGridFragmentTask(getActivity());
+        movieFragmentTask.execute(storedPreferences);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        getSortPreference();
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        if (pref == 0){
+            String columnsToExtract[] = new String[]{
+                    MovieContract.MostPopMovieEntry.COLUMN_POSTER_PATH};
+
+            String whereClause = "(" + MovieContract.MostPopMovieEntry.COLUMN_TITLE + "NOTNULL)";
+
+            return new CursorLoader(getActivity(), MovieContract.MostPopMovieEntry.CONTENT_URI, columnsToExtract, whereClause, null ,null);
+
+        }else{
+            String columnsToExtract[] = new String[]{
+                    MovieContract.TopRatedMovieEntry.COLUMN_POSTER_PATH};
+
+            String whereClause = "(" + MovieContract.TopRatedMovieEntry.COLUMN_TITLE + "NOTNULL)";
+
+            return new CursorLoader(getActivity(), MovieContract.TopRatedMovieEntry.CONTENT_URI, columnsToExtract, whereClause, null ,null);
+        }
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        adapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        adapter.swapCursor(null);
+    }
 
     final AdapterView.OnItemClickListener gridItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Intent intent = new Intent(view.getContext(), DetailActivity.class);
-            Movie movieGrid = adapter.getItem(position);
+            Movie movieGrid = (Movie) adapter.getItem(position);
             intent.putExtra("movie_id", movieGrid.getId());
             intent.putExtra("movie_img", movieGrid.getImage());
             intent.putExtra("movie_title", movieGrid.getTitle());
@@ -108,73 +154,5 @@ public class MovieGridFragment extends Fragment {
         }
     };
 
-    private class MovieGridFragmentTask extends AsyncTask<String, Void, ArrayList<Movie>>{
-        public MovieGridFragmentTask() {
-            super();
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            //displayProgressBar("Getting Movies!");
-        }
-        @Override
-        protected ArrayList<Movie> doInBackground(String... params) {
-            try {
-                URL url = new URL(params[0]);
-                Log.d("location", url.toString());
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-                BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-                StringBuilder sb = new StringBuilder();
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    sb.append(line);
-                }
-                stream = sb.toString();
-                urlConnection.disconnect();
-                try {
-                    return getMovieInfo(stream);
-                } catch (JSONException E) {
-                    E.printStackTrace();
-                }
-            } catch (MalformedURLException E) {
-                E.printStackTrace();
-            } catch (IOException E) {
-                E.printStackTrace();
-            }
-            return null;
-        }
-        @Override
-        protected void onPostExecute(ArrayList<Movie> movies) {
-            super.onPostExecute(movies);
-            adapter = new MovieGridCustomAdapter(getActivity(), R.layout.movie_item, movies);
-            grid.setAdapter(adapter);
-        }
-
-
-    }
-
-    private ArrayList<Movie> getMovieInfo(String stream) throws JSONException {
-        ArrayList<Movie> moviesArrayList = new ArrayList<>();
-        Log.d("location", "inGetMovieInfo");
-        JSONObject ObjectsOfTweets = new JSONObject(stream);
-        JSONArray listMovies = ObjectsOfTweets.getJSONArray("results");
-        for (int i = 0; i < listMovies.length(); i++) {
-            JSONObject movie = listMovies.getJSONObject(i);
-            int movieID = movie.getInt("id");
-            String title = movie.getString("title");
-            double vote_average = movie.getDouble("vote_average");
-            String release_date = movie.getString("release_date");
-            String plot = movie.getString("overview");
-            String poster_path = "http://image.tmdb.org/t/p/w185/" + movie.getString("poster_path");
-            Movie movieItem = new Movie(movieID, title, vote_average, release_date, plot, poster_path);
-            moviesArrayList.add(movieItem);
-            for (Movie x : moviesArrayList){
-                Log.d("movie", x.getTitle()+" "+x.getImage()+" "+x.getPlot());
-            }
-        }
-        return moviesArrayList;
-    }
 
 }

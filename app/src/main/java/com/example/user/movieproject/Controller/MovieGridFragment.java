@@ -1,6 +1,5 @@
 package com.example.user.movieproject.controller;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,9 +15,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
+import com.example.user.movieproject.R;
 import com.example.user.movieproject.model.Movie;
 import com.example.user.movieproject.model.MovieGridCustomAdapter;
-import com.example.user.movieproject.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,15 +38,12 @@ import java.util.ArrayList;
  * A placeholder fragment containing a simple view.
  */
 public class MovieGridFragment extends Fragment {
-    private AsyncTask<Void, Void, ArrayList<Movie>> task;
     private static String stream;
-    private static MovieGridCustomAdapter adapter;
-    private GridView grid;
+    public static MovieGridCustomAdapter adapter;
+    public static GridView grid;
     private static String storedPreferences;
     private static String url;
-    private static final String API_KEY = "YOUR API KEY";
-    private MovieGridFragmentTask movieFragmentTask;
-
+    private static final String API_KEY = "0bed95c67895bbde6f8d00e7e464c50a";
     public MovieGridFragment() {
     }
 
@@ -68,6 +64,7 @@ public class MovieGridFragment extends Fragment {
         }
         return super.onOptionsItemSelected(item);
     }
+
 
     @Override
     public void onStart() {
@@ -93,10 +90,13 @@ public class MovieGridFragment extends Fragment {
     }
 
 
+
     final AdapterView.OnItemClickListener gridItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Intent intent = new Intent(view.getContext(), DetailActivity.class);
+            Callback listener = (Callback) getActivity();
+            listener.OnItemClick(position);
+            /*Intent intent = new Intent(view.getContext(), DetailActivity.class);
             Movie movieGrid = adapter.getItem(position);
             intent.putExtra("movie_id", movieGrid.getId());
             intent.putExtra("movie_img", movieGrid.getImage());
@@ -104,9 +104,10 @@ public class MovieGridFragment extends Fragment {
             intent.putExtra("movie_rating", movieGrid.getRating());
             intent.putExtra("movie_plot", movieGrid.getPlot());
             intent.putExtra("movie_date", movieGrid.getRelease_date());
-            startActivity(intent);
+            startActivity(intent);*/
         }
     };
+
 
     private class MovieGridFragmentTask extends AsyncTask<String, Void, ArrayList<Movie>>{
         public MovieGridFragmentTask() {
@@ -116,7 +117,6 @@ public class MovieGridFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            //displayProgressBar("Getting Movies!");
         }
         @Override
         protected ArrayList<Movie> doInBackground(String... params) {
@@ -150,6 +150,7 @@ public class MovieGridFragment extends Fragment {
             super.onPostExecute(movies);
             adapter = new MovieGridCustomAdapter(getActivity(), R.layout.movie_item, movies);
             grid.setAdapter(adapter);
+
         }
 
 

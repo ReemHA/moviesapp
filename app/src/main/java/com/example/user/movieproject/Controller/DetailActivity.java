@@ -3,54 +3,25 @@ package com.example.user.movieproject.controller;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.method.ScrollingMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.example.user.movieproject.R;
-import com.squareup.picasso.Picasso;
 
 public class DetailActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setContentView(R.layout.activity_detail);
+        if (savedInstanceState == null){
+            getFragmentManager().beginTransaction().add(R.id.movie_detail_container, new DetailFragment())
+                    .commit();
+        }
 
-        Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
-        int id_temp = extras.getInt("movie_id");
-        String image_temp = extras.getString("movie_img");
-        String title_temp = extras.getString("movie_title");
-        String plot_temp = extras.getString("movie_plot");
-        double rating_temp = extras.getDouble("movie_rating");
-        String date_temp = extras.getString("movie_date");
-        String year = date_temp.split("-")[0];
-
-        TextView id = (TextView) findViewById(R.id.movie_id);
-        LinearLayout title_layout = (LinearLayout) findViewById(R.id.movie_title_layout);
-        TextView voting = (TextView) findViewById(R.id.rating);
-        TextView date = (TextView) findViewById(R.id.date);
-        TextView plot = (TextView) findViewById(R.id.plot);
-        ImageView poster = (ImageView) findViewById(R.id.movie_poster);
-
-        TextView title = (TextView) title_layout.findViewById(R.id.movie_title);
-        title.setText(title_temp);
-        voting.setText(Double.toString(rating_temp) + "/10");
-        date.setText(year);
-        plot.setText(plot_temp);
-        plot.setMovementMethod(new ScrollingMovementMethod());
-
-        Picasso.with(this.getApplicationContext())
-                .load(image_temp)
-                .resizeDimen(R.dimen.width_poster_detail, R.dimen.height_poster_detail)
-                .centerInside()
-                .into(poster);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -66,7 +37,6 @@ public class DetailActivity extends AppCompatActivity {
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
-
         if(id == R.id.home){
             this.finish();
             return true;

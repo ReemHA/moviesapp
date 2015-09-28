@@ -1,6 +1,6 @@
 package com.example.user.movieproject.model;
 public class Movie {
-    private int id;
+    private long id;
     private String title;
     private double rating;
     private String release_date;
@@ -40,7 +40,7 @@ public class Movie {
         this.image = image;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

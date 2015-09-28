@@ -52,5 +52,6 @@ public class MovieGridCustomAdapter extends ArrayAdapter<Movie> {
     static class ViewHolder{
         TextView image_id;
         ImageView movie_poster;
+
     }
 }

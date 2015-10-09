@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/padding_top_gen_2">
+
+    <TextView
+        android:id="@+id/movie_id"
+        android:layout_width="0dp"
+        android:layout_height="0dp" />
+
+    <LinearLayout
+        android:id="@+id/movie_title_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_bg_title"
+        android:background="@color/teal">
+
+        <TextView
+            android:id="@+id/movie_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingLeft="@dimen/padding_left"
+            android:paddingRight="@dimen/padding_left"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_1" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/movie_poster"
+        android:layout_width="@dimen/width_poster_detail"
+        android:layout_height="@dimen/height_poster_detail"
+        android:layout_below="@+id/movie_title_layout"
+        android:paddingLeft="@dimen/padding_left"
+        android:paddingTop="@dimen/padding_top_gen_2" />
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/movie_title_layout"
+        android:layout_toRightOf="@id/movie_poster"
+        android:paddingLeft="@dimen/padding_left_2"
+        android:paddingTop="@dimen/padding_top_gen"
+        android:textSize="@dimen/text_size_2" />
+
+    <TextView
+        android:id="@+id/rating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/date"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/date"
+        android:paddingLeft="@dimen/padding_left_2"
+        android:paddingTop="@dimen/padding_top_gen"
+        android:textSize="@dimen/text_size_3" />
+
+    <Button
+        android:id="@+id/addfav"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/date"
+        android:layout_below="@id/rating"
+        android:layout_marginLeft="@dimen/padding_left_2"
+        android:layout_marginTop="@dimen/padding_top_gen"
+        android:background="@color/light_teal"
+        android:text="MARK AS FAVOURITE" />
+
+    <TextView
+        android:id="@+id/plot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/movie_poster"
+        android:paddingLeft="@dimen/padding_left"
+        android:paddingRight="@dimen/padding_left"
+        android:paddingTop="@dimen/plot_padding"
+        android:textSize="@dimen/plot_text_size" />
+    </RelativeLayout>
+</LinearLayout>

@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.user.movieproject" >
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -21,16 +26,48 @@
         <activity
             android:name=".controller.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".controller.MainActivity"
-            >
+            android:parentActivityName=".controller.MainActivity" >
         </activity>
         <activity
             android:name=".controller.DetailActivity"
             android:label="@string/title_activity_detail"
-            android:parentActivityName=".controller.MainActivity">
+            android:parentActivityName=".controller.MainActivity" >
         </activity>
 
+        <provider
+            android:name=".data.MovieDbProvider"
+            android:authorities="@string/content_authority"
+            android:exported="false"
+            android:readPermission="com.example.user.movieproject.READ"
+            android:syncable="true"
+            android:writePermission="com.example.user.movieproject.WRITE" />
 
+        <!-- HERE SERVICE AUTH -->
+        <service android:name=".sync.MoviesAuthenticatorService" >
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator" />
+        </service>
+        <service
+            android:name=".sync.MovieSyncService"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/sync_adapter" />
+        </service>
+
+        <activity
+            android:name=".controller.favourite"
+            android:label="@string/title_activity_favourite" >
+        </activity>
     </application>
 
 </manifest>

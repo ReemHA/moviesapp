@@ -1,22 +1,29 @@
 package com.example.user.movieproject.model;
+
+import java.util.ArrayList;
+
 public class Movie {
-    private long id;
+    private String id;
     private String title;
     private double rating;
     private String release_date;
     private String plot;
     private String image;
+    private String review;
+    private ArrayList<String> trailer;
 
-    public Movie(int id, String title, double rating,String release_date, String plot,String image){
+    public Movie(String id, String title, double rating,String release_date, String plot,String image, ArrayList<String> trailer){
         this.id = id;
         this.title = title;
         this.rating = rating;
         this.release_date = release_date;
         this.plot = plot;
         this.image = image;
+       // this.review = review;
+        this.trailer = trailer;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -40,7 +47,15 @@ public class Movie {
         this.image = image;
     }
 
-    public long getId() {
+    public void setReview(String review) {
+        this.review = review;
+    }
+
+    public void setTrailer(ArrayList<String> trailer) {
+        this.trailer = trailer;
+    }
+
+    public String getId() {
         return id;
     }
 
@@ -62,5 +77,13 @@ public class Movie {
 
     public String getImage() {
         return image;
+    }
+
+    public String getReview() {
+        return review;
+    }
+
+    public ArrayList<String> getTrailer() {
+        return trailer;
     }
 }

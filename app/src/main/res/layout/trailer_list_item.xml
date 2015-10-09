@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/trailer_list_item"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/padding_top_gen"
+        android:layout_marginBottom="@dimen/padding_top_gen">
+
+        <View
+            android:id="@+id/line_above"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/padding_left"
+            android:layout_marginRight="@dimen/padding_left"
+            android:layout_marginBottom="@dimen/trailer_padding"
+            android:background="@color/light_grey"></View>
+
+        <ImageView
+            android:id="@+id/play_glyph"
+            android:layout_width="@dimen/width_play_glyph"
+            android:layout_height="@dimen/height_play_glyph"
+            android:layout_marginLeft="@dimen/padding_left"
+            android:layout_marginTop="@dimen/padding_top_gen_2"
+
+            android:layout_below="@+id/line_above"
+            android:src="@drawable/play_glyph" />
+
+        <TextView
+            android:id="@+id/trailer_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/padding_left_2"
+            android:layout_marginTop="@dimen/margin_trailer_item"
+            android:layout_toRightOf="@+id/play_glyph"
+            android:layout_centerHorizontal="true"
+            android:text="Trailer" />
+
+        <View
+            android:id="@+id/line_below"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/padding_left"
+            android:layout_marginRight="@dimen/padding_left"
+            android:layout_marginBottom="@dimen/trailer_padding"
+            android:layout_marginTop="@dimen/margin_line_below"
+            android:background="@color/light_grey"></View>
+
+    </RelativeLayout>
+</LinearLayout>

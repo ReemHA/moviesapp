@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  * Created by USER on 9/9/2015.
  */
 public class MovieDbHelper extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 1;
     static final String DATABASE_NAME = "movie.db";
 
     public MovieDbHelper(Context context) {
@@ -22,7 +22,7 @@ public class MovieDbHelper extends SQLiteOpenHelper {
                 MovieContract.TopRatedMovieEntry.COLUMN_MOVIE_ID + " INT NOT NULL, " +
                 MovieContract.TopRatedMovieEntry.COLUMN_TITLE + " TEXT NOT NULL," +
                 MovieContract.TopRatedMovieEntry.COLUMN_PLOT + " TEXT NOT NULL," +
-                MovieContract.TopRatedMovieEntry.COLUMN_POSTER_PATH + " TEXT NOT NULL," +
+                MovieContract.TopRatedMovieEntry.COLUMN_POSTER_PATH + " TEXT," +
                 MovieContract.TopRatedMovieEntry.COLUMN_VOTE_AVG + " REAL NOT NULL," +
                 MovieContract.TopRatedMovieEntry.COLUMN_RELEASE_DATE + " TEXT NOT NULL," +
                 MovieContract.TopRatedMovieEntry.COLUMN_IS_FAVOURITE + " INT);";
@@ -31,7 +31,7 @@ public class MovieDbHelper extends SQLiteOpenHelper {
                 MovieContract.MostPopMovieEntry.COLUMN_MOVIE_ID + " INT NOT NULL, " +
                 MovieContract.MostPopMovieEntry.COLUMN_TITLE + " TEXT NOT NULL," +
                 MovieContract.MostPopMovieEntry.COLUMN_PLOT + " TEXT NOT NULL," +
-                MovieContract.MostPopMovieEntry.COLUMN_POSTER_PATH + " TEXT NOT NULL," +
+                MovieContract.MostPopMovieEntry.COLUMN_POSTER_PATH + " TEXT," +
                 MovieContract.MostPopMovieEntry.COLUMN_VOTE_AVG + " REAL NOT NULL," +
                 MovieContract.MostPopMovieEntry.COLUMN_RELEASE_DATE + " TEXT NOT NULL," +
                 MovieContract.MostPopMovieEntry.COLUMN_IS_FAVOURITE + " INT NOT NULL);";
@@ -41,7 +41,7 @@ public class MovieDbHelper extends SQLiteOpenHelper {
                 MovieContract.FavouriteMoviesEntry.COLUMN_MOVIE_ID + " INT NOT NULL, " +
                 MovieContract.FavouriteMoviesEntry.COLUMN_TITLE + " TEXT NOT NULL," +
                 MovieContract.FavouriteMoviesEntry.COLUMN_PLOT + " TEXT NOT NULL," +
-                MovieContract.FavouriteMoviesEntry.COLUMN_POSTER_PATH + " TEXT NOT NULL," +
+                MovieContract.FavouriteMoviesEntry.COLUMN_POSTER_PATH + " TEXT," +
                 MovieContract.FavouriteMoviesEntry.COLUMN_VOTE_AVG + " REAL NOT NULL," +
                 MovieContract.FavouriteMoviesEntry.COLUMN_RELEASE_DATE + " TEXT NOT NULL);";
         final String SQL_CREATE_TRAILER_TABLE = "CREATE TABLE " + MovieContract.TrailersEntry.TABLE_NAME + "( "

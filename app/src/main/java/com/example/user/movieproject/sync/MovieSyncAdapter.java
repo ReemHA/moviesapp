@@ -34,7 +34,7 @@ import java.util.Vector;
  * Created by USER on 10/3/2015.
  */
 public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
-    private final String API_KEY = "0bed95c67895bbde6f8d00e7e464c50a";
+    private final String API_KEY = "YOU API KEY";
     public final String LOG_TAG = MovieSyncAdapter.class.getSimpleName();
     public static final int SYNC_INTERVAL = 60 * 180;
     public static final int SYNC_FLEXTIME = SYNC_INTERVAL / 3;
@@ -218,6 +218,7 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
         if (cVV.size() > 0) {
             ContentValues[] cvArray = new ContentValues[cVV.size()];
             cVV.toArray(cvArray);
+            //getContext().getContentResolver().delete(MovieContract.TrailersEntry.CONTENT_URI, null, null);
             getContext().getContentResolver().bulkInsert(MovieContract.TrailersEntry.CONTENT_URI, cvArray);
         }
         return;
@@ -241,6 +242,7 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
         if (cVV.size() > 0) {
             ContentValues[] cvArray = new ContentValues[cVV.size()];
             cVV.toArray(cvArray);
+            //getContext().getContentResolver().delete(MovieContract.ReviewsEntry.CONTENT_URI, null, null);
             getContext().getContentResolver().bulkInsert(MovieContract.ReviewsEntry.CONTENT_URI, cvArray);
             Log.d(LOG_TAG, "Sync Complete. " + cVV.size() + " Inserted");
         }
@@ -267,7 +269,7 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
                     movieValues.put(MovieContract.MostPopMovieEntry.COLUMN_VOTE_AVG, movie.getDouble("vote_average"));
                     movieValues.put(MovieContract.MostPopMovieEntry.COLUMN_RELEASE_DATE, movie.getString("release_date").split("-")[0]);
                     movieValues.put(MovieContract.MostPopMovieEntry.COLUMN_PLOT, movie.getString("overview"));
-                    movieValues.put(MovieContract.MostPopMovieEntry.COLUMN_POSTER_PATH, "http://image.tmdb.org/t/p/w185/" + movie.getString("poster_path"));
+                    movieValues.put(MovieContract.MostPopMovieEntry.COLUMN_POSTER_PATH, movie.getString("poster_path"));
                     movieValues.put(MovieContract.MostPopMovieEntry.COLUMN_IS_FAVOURITE, 0);
                     contentVVMostPop.add(movieValues);
 
@@ -277,7 +279,7 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
                     movieValues.put(MovieContract.TopRatedMovieEntry.COLUMN_VOTE_AVG, movie.getDouble("vote_average"));
                     movieValues.put(MovieContract.TopRatedMovieEntry.COLUMN_RELEASE_DATE, movie.getString("release_date").split("-")[0]);
                     movieValues.put(MovieContract.TopRatedMovieEntry.COLUMN_PLOT, movie.getString("overview"));
-                    movieValues.put(MovieContract.TopRatedMovieEntry.COLUMN_POSTER_PATH, "http://image.tmdb.org/t/p/w185/" + movie.getString("poster_path"));
+                    movieValues.put(MovieContract.TopRatedMovieEntry.COLUMN_POSTER_PATH, movie.getString("poster_path"));
                     movieValues.put(MovieContract.TopRatedMovieEntry.COLUMN_IS_FAVOURITE, 0);
                     contentVVTopRated.add(movieValues);
 

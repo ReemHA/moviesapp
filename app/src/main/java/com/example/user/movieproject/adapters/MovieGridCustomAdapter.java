@@ -53,6 +53,7 @@ public class MovieGridCustomAdapter extends CursorAdapter {
         Log.d(LOG_TAG, cursor.getString(posterColIndex));
         Picasso.with(context)
                 .load(Uri.parse("http://image.tmdb.org/t/p/w185" + cursor.getString(posterColIndex)).buildUpon().build())
+                .placeholder(R.drawable.images)
                 .resizeDimen(R.dimen.width_poster, R.dimen.height_poster)
                 .centerInside()
                 .tag(context)

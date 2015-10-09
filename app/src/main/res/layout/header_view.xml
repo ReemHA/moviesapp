@@ -15,7 +15,7 @@
     <LinearLayout
         android:id="@+id/movie_title_layout"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/height_bg_title"
+        android:layout_height="150dp"
         android:background="@color/teal">
 
         <TextView
@@ -68,7 +68,8 @@
         android:layout_marginLeft="@dimen/padding_left_2"
         android:layout_marginTop="@dimen/padding_top_gen"
         android:background="@color/light_teal"
-        android:text="MARK AS FAVOURITE" />
+        android:text="MARK AS FAVOURITE"
+        android:onClick="addToFav"/>
 
     <TextView
         android:id="@+id/plot"

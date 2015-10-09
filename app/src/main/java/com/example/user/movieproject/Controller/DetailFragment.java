@@ -19,8 +19,6 @@ import com.commonsware.cwac.merge.MergeAdapter;
 import com.example.user.movieproject.R;
 import com.example.user.movieproject.adapters.MovieDescAdapter;
 import com.example.user.movieproject.adapters.ReviewCursorAdapter;
-import com.example.user.movieproject.adapters.ReviewsAdapter;
-import com.example.user.movieproject.adapters.TrailerAdapter;
 import com.example.user.movieproject.adapters.TrailerCursorAdapter;
 import com.example.user.movieproject.data.MovieContract;
 
@@ -30,10 +28,7 @@ import com.example.user.movieproject.data.MovieContract;
 public class DetailFragment extends Fragment {
     public static String MOVIE_URI_WITH_ID = "movieUriWithId";
     public static String MOVIE_ROW_ID = "MOVIE_ROW_ID";
-    public static TrailerAdapter trailerAdapter;
-    public static ReviewsAdapter reviewsAdapter;
     public static MovieDescAdapter movieDescAdapter;
-    private String API_KEY = "0bed95c67895bbde6f8d00e7e464c50a";
     String LOG_TAG = DetailFragment.class.getSimpleName();
     private static MergeAdapter mergeAdapter;
     private static ListView listView;

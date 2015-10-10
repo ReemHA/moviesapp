@@ -2,4 +2,5 @@
     <header
         android:fragment="com.example.user.movieproject.controller.SettingsActivity$SortPreferenceFragment"
         android:title="@string/pref_sort" />
+
 </preference-headers>

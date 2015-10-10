@@ -10,6 +10,6 @@
     <color name="white">#FFFFFF</color>
     <color name="dark_grey">#2a4747</color>
     <color name="light_grey">#D3D3D3</color>
-    <string name="title_activity_favourite">favourite</string>
+    <string name="title_activity_favourite">My Favourite</string>
 
 </resources>

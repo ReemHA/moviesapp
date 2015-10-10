@@ -218,7 +218,7 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
         if (cVV.size() > 0) {
             ContentValues[] cvArray = new ContentValues[cVV.size()];
             cVV.toArray(cvArray);
-            //getContext().getContentResolver().delete(MovieContract.TrailersEntry.CONTENT_URI, null, null);
+            getContext().getContentResolver().delete(MovieContract.TrailersEntry.CONTENT_URI, null, null);
             getContext().getContentResolver().bulkInsert(MovieContract.TrailersEntry.CONTENT_URI, cvArray);
         }
         return;
@@ -242,7 +242,7 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
         if (cVV.size() > 0) {
             ContentValues[] cvArray = new ContentValues[cVV.size()];
             cVV.toArray(cvArray);
-            //getContext().getContentResolver().delete(MovieContract.ReviewsEntry.CONTENT_URI, null, null);
+            getContext().getContentResolver().delete(MovieContract.ReviewsEntry.CONTENT_URI, null, null);
             getContext().getContentResolver().bulkInsert(MovieContract.ReviewsEntry.CONTENT_URI, cvArray);
             Log.d(LOG_TAG, "Sync Complete. " + cVV.size() + " Inserted");
         }

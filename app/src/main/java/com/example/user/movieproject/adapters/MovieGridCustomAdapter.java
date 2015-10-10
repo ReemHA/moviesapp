@@ -21,7 +21,6 @@ import com.squareup.picasso.Picasso;
  */
 
 public class MovieGridCustomAdapter extends CursorAdapter {
-    private static String storedPreferences;
     String LOG_TAG = MovieGridCustomAdapter.class.getSimpleName();
 
     public MovieGridCustomAdapter(Context context, Cursor cursor, int flags) {

@@ -14,7 +14,7 @@ import com.example.user.movieproject.sync.MovieSyncAdapter;
 public class MainActivity extends AppCompatActivity implements Callback {
     static boolean mTwoPane;
     private static final String DETAILFRAGMENT_TAG = "DFTAG";
-    String LOG_TAG = MainActivity.class.getSimpleName();
+    static final String LOG_TAG = MainActivity.class.getSimpleName();
     String mSortPref;
 
     @Override
@@ -76,19 +76,26 @@ public class MainActivity extends AppCompatActivity implements Callback {
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, com.example.user.movieproject.controller.SettingsActivity.class));
             return true;
+        } else if (id == R.id.favPage) {
+            Intent intent = new Intent(MainActivity.this, FavouriteActivity.class);
+            startActivity(intent);
+            return true;
+        } else if (id == R.id.action_refresh) {
+            MovieSyncAdapter.syncImmediately(this);
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
-    public void OnItemClick(Uri contentUri) {
+    public void OnItemClick(Uri contentUri, String className) {
         if (mTwoPane) {
-                // DetailFragment detailFragment = new DetailFragment();
-                Log.d(LOG_TAG, "in a mTwoPane");
-                Bundle args = new Bundle();
-                //args.putInt(DetailFragment.KEY_POSITION, movieIndex);
-                //detailFragment.setArguments(args);
-                //getFragmentManager().beginTransaction().replace(R.id.movie_detail_container, detailFragment, DETAILFRAGMENT_TAG).commit();
+            // DetailFragment detailFragment = new DetailFragment();
+            Log.d(LOG_TAG, "in a mTwoPane");
+            Bundle args = new Bundle();
+            //args.putInt(DetailFragment.KEY_POSITION, movieIndex);
+            //detailFragment.setArguments(args);
+            //getFragmentManager().beginTransaction().replace(R.id.movie_detail_container, detailFragment, DETAILFRAGMENT_TAG).commit();
             args.putParcelable(DetailFragment.MOVIE_URI_WITH_ID, contentUri);
             DetailFragment detailFragment = new DetailFragment();
             detailFragment.setArguments(args);
@@ -98,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements Callback {
         } else {
             Intent intent = new Intent(this, DetailActivity.class)
                     .setData(contentUri);
+            intent.putExtra("className", LOG_TAG);
             startActivity(intent);
         }
     }

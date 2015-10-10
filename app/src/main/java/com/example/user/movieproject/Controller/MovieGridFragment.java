@@ -15,8 +15,8 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.example.user.movieproject.R;
-import com.example.user.movieproject.data.MovieContract;
 import com.example.user.movieproject.adapters.MovieGridCustomAdapter;
+import com.example.user.movieproject.data.MovieContract;
 import com.example.user.movieproject.sync.MovieSyncAdapter;
 
 
@@ -24,11 +24,11 @@ import com.example.user.movieproject.sync.MovieSyncAdapter;
  * A placeholder fragment containing a simple view.
  */
 public class MovieGridFragment extends Fragment implements android.support.v4.app.LoaderManager.LoaderCallbacks<Cursor> {
-    public static MovieGridCustomAdapter movieAdapter;
+    private static MovieGridCustomAdapter movieAdapter;
     String pref;
     public static final int MOVIE_LOADER = 0;
     public static GridView grid;
-    String LOG_TAG = MovieGridFragment.class.getSimpleName();
+    public static final String LOG_TAG = MovieGridFragment.class.getSimpleName();
 
     public MovieGridFragment() {
     }
@@ -67,18 +67,11 @@ public class MovieGridFragment extends Fragment implements android.support.v4.ap
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        String a;
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         grid = (GridView) rootView.findViewById(R.id.movies_grid);
         movieAdapter = new MovieGridCustomAdapter(getActivity(), null, 0);
         grid.setAdapter(movieAdapter);
         grid.setOnItemClickListener(gridItemClickListener);
-        if (movieAdapter == null){
-            a = "Movie Adapter is null";
-        }else {
-            a = "Movie Adapter is not null";
-        }
-        Log.d(LOG_TAG, a);
         return rootView;
     }
 
@@ -89,10 +82,10 @@ public class MovieGridFragment extends Fragment implements android.support.v4.ap
             if (cursor != null){
                if(Utility.getSortPreference(getActivity()).equals("0")){
                    ((Callback) getActivity())
-                           .OnItemClick(MovieContract.MostPopMovieEntry.buildMovieWithId(id));
+                           .OnItemClick(MovieContract.MostPopMovieEntry.buildMovieWithId(id), LOG_TAG);
                }else{
                    ((Callback) getActivity())
-                           .OnItemClick(MovieContract.TopRatedMovieEntry.buildMovieWithId(id));
+                           .OnItemClick(MovieContract.TopRatedMovieEntry.buildMovieWithId(id), LOG_TAG);
                }
             }
             /*Intent intent = new Intent(view.getContext(), DetailActivity.class);
@@ -120,7 +113,8 @@ public class MovieGridFragment extends Fragment implements android.support.v4.ap
         String a;
         if (pref.equals("0")) {
             cursorLoader = new android.support.v4.content.CursorLoader(
-                    getActivity(), MovieContract.MostPopMovieEntry.CONTENT_URI,
+                    getActivity(),
+                    MovieContract.MostPopMovieEntry.CONTENT_URI,
                     new String[]{MovieContract.MostPopMovieEntry._ID, MovieContract.MostPopMovieEntry.COLUMN_POSTER_PATH},
                     null,
                     null,

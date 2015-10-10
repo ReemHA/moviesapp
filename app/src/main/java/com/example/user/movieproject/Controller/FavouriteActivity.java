@@ -1,46 +1,22 @@
 package com.example.user.movieproject.controller;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.GridView;
 
 import com.example.user.movieproject.R;
-import com.example.user.movieproject.adapters.MovieGridCustomAdapter;
-import com.example.user.movieproject.data.MovieContract;
 
-public class FavouriteActivity extends AppCompatActivity implements android.support.v4.app.LoaderManager.LoaderCallbacks<Cursor>, Callback {
-    static final int FAV_MOVIE_LOADER = 2;
-    private static final String LOG_TAG = FavouriteActivity.class.getSimpleName();
-    MovieGridCustomAdapter movieAdapter;
+public class FavouriteActivity extends AppCompatActivity implements Callback {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favourite);
-        GridView grid = (GridView) this.findViewById(R.id.fav_movies_grid);
-        movieAdapter = new MovieGridCustomAdapter(getApplicationContext(), null, 0);
-        grid.setAdapter(movieAdapter);
-        grid.setOnItemClickListener(gridItemClickListener);
-        getSupportLoaderManager().initLoader(FAV_MOVIE_LOADER, null, this);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
-
-    final AdapterView.OnItemClickListener gridItemClickListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Cursor cursor = (Cursor) parent.getItemAtPosition(position);
-            if (cursor != null) {
-                ((Callback) getApplicationContext())
-                        .OnItemClick(MovieContract.FavouriteMoviesEntry.buildMovieWithId(id));
-            }
-        }
-    };
 
 
     @Override
@@ -60,43 +36,20 @@ public class FavouriteActivity extends AppCompatActivity implements android.supp
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        } else if (id == R.id.home) {
+            this.finish();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-
-
     @Override
-    public android.support.v4.content.Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        android.support.v4.content.CursorLoader cursorLoader;
-        cursorLoader = new android.support.v4.content.CursorLoader(
-                getApplicationContext(), MovieContract.FavouriteMoviesEntry.CONTENT_URI,
-                new String[]{MovieContract.FavouriteMoviesEntry._ID, MovieContract.FavouriteMoviesEntry.COLUMN_POSTER_PATH},
-                null,
-                null,
-                null);
-        return cursorLoader;
-    }
-
-    @Override
-    public void onLoadFinished(android.support.v4.content.Loader<Cursor> loader, Cursor data) {
-        Log.d(LOG_TAG, data.getCount() + " rows loaded");
-        movieAdapter.swapCursor(null);
-
-
-    }
-
-    @Override
-    public void onLoaderReset(android.support.v4.content.Loader<Cursor> loader) {
-        movieAdapter.swapCursor(null);
-
-    }
-
-    @Override
-    public void OnItemClick(Uri contentUri) {
+    public void OnItemClick(Uri contentUri, String ClassName) {
         Intent intent = new Intent(this, DetailActivity.class)
                 .setData(contentUri);
+        intent.putExtra("className", ClassName);
         startActivity(intent);
     }
+
 }

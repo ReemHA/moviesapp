@@ -1,7 +1,6 @@
 package com.example.user.movieproject.controller;
 
 import android.app.Fragment;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -27,12 +26,10 @@ import com.example.user.movieproject.data.MovieContract;
  */
 public class DetailFragment extends Fragment {
     public static String MOVIE_URI_WITH_ID = "movieUriWithId";
-    public static String MOVIE_ROW_ID = "MOVIE_ROW_ID";
-    public static MovieDescAdapter movieDescAdapter;
     String LOG_TAG = DetailFragment.class.getSimpleName();
-    private static MergeAdapter mergeAdapter;
-    private static ListView listView;
-    String movieId;
+    private String movieId;
+    int isFavourite;
+    Uri movieUriWithId;
 
     public DetailFragment() {
         super();
@@ -49,143 +46,82 @@ public class DetailFragment extends Fragment {
         super.onSaveInstanceState(outState);
     }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         String pref = Utility.getSortPreference(getActivity());
-        Cursor cursor;
+        MergeAdapter mergeAdapter = new MergeAdapter();
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
-        listView = (ListView) rootView.findViewById(R.id.list_view_details_fragment);
+        ListView listView = (ListView) rootView.findViewById(R.id.list_view_details_fragment);
+        Cursor cursor;
+        String className;
         Intent intent = getActivity().getIntent();
+        movieUriWithId = intent.getData();
+        className = intent.getExtras().getString("className");
         if (intent == null) {
             return null;
         }
-        int isFavourite;
-        mergeAdapter = new MergeAdapter();
-        Uri movieUriWithId = intent.getData();
-        if (pref.equals("0")) {
-            movieId = Utility.getMovieIdFromUri(getActivity(), movieUriWithId);
-            cursor = getActivity().getContentResolver().query(
-                    MovieContract.MostPopMovieEntry.CONTENT_URI,
-                    null,
-                    MovieContract.MostPopMovieEntry._ID + " = ?",
-                    new String[]{String.valueOf(MovieContract.MostPopMovieEntry.getIdFromUri(movieUriWithId))},
-                    null);
-            //isFavourite = cursor.getInt(cursor.getColumnIndex(MovieContract.MostPopMovieEntry.COLUMN_IS_FAVOURITE));
-        } else {
-            movieId = Utility.getMovieIdFromUri(getActivity(), movieUriWithId);
-            cursor = getActivity().getContentResolver().query(
-                    MovieContract.TopRatedMovieEntry.CONTENT_URI,
-                    null,
-                    MovieContract.TopRatedMovieEntry._ID + " = ?",
-                    new String[]{String.valueOf(MovieContract.TopRatedMovieEntry.getIdFromUri(movieUriWithId))},
-                    null);
-           // isFavourite = cursor.getInt(cursor.getColumnIndex(MovieContract.TopRatedMovieEntry.COLUMN_IS_FAVOURITE));
-        }
-        Cursor trailers = getActivity().getContentResolver().query(
-                MovieContract.TrailersEntry.CONTENT_URI,
-                new String[]{MovieContract.TrailersEntry._ID, MovieContract.TrailersEntry.COLUMN_NAME, MovieContract.TrailersEntry.COLUMN_YOUTUBE_KEY},
-                MovieContract.TrailersEntry.COLUMN_MOVIE_ID + " = ?",
-                new String[]{movieId},
-                null
-        );
-        Cursor reviews = getActivity().getContentResolver().query(
-                MovieContract.ReviewsEntry.CONTENT_URI,
-                new String[]{MovieContract.ReviewsEntry._ID, MovieContract.ReviewsEntry.COLUMN_AUTHOR, MovieContract.ReviewsEntry.COLUMN_TEXT},
-                MovieContract.ReviewsEntry.COLUMN_MOVIE_ID + " = ?",
-                new String[]{movieId},
-                null
-        );
 
-        /*Button button = (Button) inflater.inflate(R.layout.header_view, container, false).findViewById(R.id.addfav);
+
+      /*  Button button = (Button) inflater.inflate(R.layout.header_view, container, false).findViewById(R.id.addfav);
+
         if (isFavourite == 1) {
             button.setEnabled(false);
         } else {
             button.setEnabled(true);
         }*/
+        movieId = Utility.getMovieIdFromUri(getActivity(), movieUriWithId);
+        if (className.equals(MainActivity.LOG_TAG)) {
+            if (pref.equals("0")) {
+                cursor = getActivity().getContentResolver().query(
+                        MovieContract.MostPopMovieEntry.CONTENT_URI,
+                        null,
+                        MovieContract.MostPopMovieEntry._ID + " = ?",
+                        new String[]{String.valueOf(MovieContract.MostPopMovieEntry.getIdFromUri(movieUriWithId))},
+                        null);
+            } else {
+                cursor = getActivity().getContentResolver().query(
+                        MovieContract.TopRatedMovieEntry.CONTENT_URI,
+                        null,
+                        MovieContract.TopRatedMovieEntry._ID + " = ?",
+                        new String[]{String.valueOf(MovieContract.TopRatedMovieEntry.getIdFromUri(movieUriWithId))},
+                        null);
+            }
+        } else {
+            cursor = getActivity().getContentResolver().query(
+                    MovieContract.FavouriteMoviesEntry.CONTENT_URI,
+                    null,
+                    MovieContract.FavouriteMoviesEntry._ID + " = ?",
+                    new String[]{String.valueOf(MovieContract.FavouriteMoviesEntry.getIdFromUri(movieUriWithId))},
+                    null);
+        }
 
-        movieDescAdapter = new MovieDescAdapter(this.getActivity(), cursor, 0);
-        mergeAdapter.addAdapter(movieDescAdapter);
-        mergeAdapter.addAdapter(new TrailerCursorAdapter(this.getActivity(), trailers, 0));
-        mergeAdapter.addAdapter(new ReviewCursorAdapter(this.getActivity(), reviews, 0));
+
+        Cursor trCursor = getActivity().getContentResolver().query(
+                MovieContract.TrailersEntry.CONTENT_URI,
+                new String[]{MovieContract.TrailersEntry._ID, MovieContract.TrailersEntry.COLUMN_NAME, MovieContract.TrailersEntry.COLUMN_YOUTUBE_KEY},
+                MovieContract.TrailersEntry.COLUMN_MOVIE_ID + " = ?",
+                new String[]{movieId},
+                null);
+
+        Cursor reCursor = getActivity().getContentResolver().query(
+                MovieContract.ReviewsEntry.CONTENT_URI,
+                new String[]{MovieContract.ReviewsEntry._ID, MovieContract.ReviewsEntry.COLUMN_AUTHOR, MovieContract.ReviewsEntry.COLUMN_TEXT},
+                MovieContract.ReviewsEntry.COLUMN_MOVIE_ID + " = ?",
+                new String[]{movieId},
+                null);
+        mergeAdapter.addAdapter(new MovieDescAdapter(getActivity(), cursor, 0));
+        mergeAdapter.addAdapter(new TrailerCursorAdapter(getActivity(), trCursor, 0));
+        mergeAdapter.addAdapter(new ReviewCursorAdapter(getActivity(), reCursor, 0));
         listView.setAdapter(mergeAdapter);
 
+       /* cursor.close();
+        trailers.close();
+        reviews.close();*/
         return rootView;
     }
 
-    public void addToFav(View view) {
-        ContentValues contentValues = new ContentValues();
-        Cursor query_movie;
-        int update_movie;
-        if (Utility.getSortPreference(getActivity()).equals("0")) {
-            query_movie = getActivity().getContentResolver().query(
-                    MovieContract.MostPopMovieEntry.CONTENT_URI,
-                    null,
-                    MovieContract.MostPopMovieEntry.COLUMN_MOVIE_ID + " = ?",
-                    new String[]{movieId},
-                    null);
-            contentValues.put(MovieContract.FavouriteMoviesEntry.COLUMN_MOVIE_ID,
-                    query_movie.getString(query_movie.getColumnIndex(MovieContract.MostPopMovieEntry.COLUMN_MOVIE_ID)));
-            contentValues.put(MovieContract.FavouriteMoviesEntry.COLUMN_TITLE,
-                    query_movie.getString(query_movie.getColumnIndex(MovieContract.MostPopMovieEntry.COLUMN_TITLE)));
-            contentValues.put(MovieContract.FavouriteMoviesEntry.COLUMN_PLOT,
-                    query_movie.getString(query_movie.getColumnIndex(MovieContract.MostPopMovieEntry.COLUMN_PLOT)));
-            contentValues.put(MovieContract.FavouriteMoviesEntry.COLUMN_POSTER_PATH,
-                    query_movie.getString(query_movie.getColumnIndex(MovieContract.MostPopMovieEntry.COLUMN_POSTER_PATH)));
-            contentValues.put(MovieContract.FavouriteMoviesEntry.COLUMN_VOTE_AVG,
-                    query_movie.getString(query_movie.getColumnIndex(MovieContract.MostPopMovieEntry.COLUMN_VOTE_AVG)));
-            contentValues.put(MovieContract.FavouriteMoviesEntry.COLUMN_RELEASE_DATE,
-                    query_movie.getString(query_movie.getColumnIndex(MovieContract.MostPopMovieEntry.COLUMN_RELEASE_DATE)));
-
-            ContentValues cv = new ContentValues();
-            cv.put(MovieContract.MostPopMovieEntry.COLUMN_IS_FAVOURITE, 1);
-            update_movie = getActivity().getContentResolver().update(
-                    MovieContract.MostPopMovieEntry.CONTENT_URI,
-                    cv,
-                    MovieContract.MostPopMovieEntry.COLUMN_MOVIE_ID +" = ?",
-                    new String[]{movieId});
-    }
-
-    else
-    {
-        query_movie = getActivity().getContentResolver().query(
-                MovieContract.TopRatedMovieEntry.CONTENT_URI,
-                null,
-                MovieContract.TopRatedMovieEntry.COLUMN_MOVIE_ID + " = ?",
-                new String[]{movieId},
-                null);
-        contentValues.put(MovieContract.FavouriteMoviesEntry.COLUMN_MOVIE_ID,
-                query_movie.getString(query_movie.getColumnIndex(MovieContract.TopRatedMovieEntry.COLUMN_MOVIE_ID)));
-        contentValues.put(MovieContract.FavouriteMoviesEntry.COLUMN_TITLE,
-                query_movie.getString(query_movie.getColumnIndex(MovieContract.TopRatedMovieEntry.COLUMN_TITLE)));
-        contentValues.put(MovieContract.FavouriteMoviesEntry.COLUMN_PLOT,
-                query_movie.getString(query_movie.getColumnIndex(MovieContract.TopRatedMovieEntry.COLUMN_PLOT)));
-        contentValues.put(MovieContract.FavouriteMoviesEntry.COLUMN_POSTER_PATH,
-                query_movie.getString(query_movie.getColumnIndex(MovieContract.TopRatedMovieEntry.COLUMN_POSTER_PATH)));
-        contentValues.put(MovieContract.FavouriteMoviesEntry.COLUMN_VOTE_AVG,
-                query_movie.getString(query_movie.getColumnIndex(MovieContract.TopRatedMovieEntry.COLUMN_VOTE_AVG)));
-        contentValues.put(MovieContract.FavouriteMoviesEntry.COLUMN_RELEASE_DATE,
-                query_movie.getString(query_movie.getColumnIndex(MovieContract.TopRatedMovieEntry.COLUMN_RELEASE_DATE)));
-
-        //update
-        ContentValues cv = new ContentValues();
-        cv.put(MovieContract.TopRatedMovieEntry.COLUMN_IS_FAVOURITE, 1);
-        getActivity().getContentResolver().update(
-                MovieContract.TopRatedMovieEntry.CONTENT_URI,
-                cv,
-                MovieContract.TopRatedMovieEntry.COLUMN_MOVIE_ID +" = ?",
-                new String[]{movieId});
-    }
-
-    Uri insertedMovieUri =
-            getActivity().getContentResolver().insert(MovieContract.FavouriteMoviesEntry.CONTENT_URI, contentValues);
-}
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

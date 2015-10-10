@@ -34,7 +34,7 @@ import java.util.Vector;
  * Created by USER on 10/3/2015.
  */
 public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
-    private final String API_KEY = "0bed95c67895bbde6f8d00e7e464c50a";
+    private final String API_KEY = "YOUR API KEY";
     public final String LOG_TAG = MovieSyncAdapter.class.getSimpleName();
     public static final int SYNC_INTERVAL = 60 * 180;
     public static final int SYNC_FLEXTIME = SYNC_INTERVAL / 3;

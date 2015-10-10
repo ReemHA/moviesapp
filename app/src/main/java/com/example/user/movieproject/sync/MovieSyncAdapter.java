@@ -34,7 +34,7 @@ import java.util.Vector;
  * Created by USER on 10/3/2015.
  */
 public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
-    private final String API_KEY = "YOUR API KEY";
+    private final String API_KEY = "YOUR API_KEY";
     public final String LOG_TAG = MovieSyncAdapter.class.getSimpleName();
     public static final int SYNC_INTERVAL = 60 * 180;
     public static final int SYNC_FLEXTIME = SYNC_INTERVAL / 3;
@@ -62,12 +62,14 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
         Uri builtUri;
         try {
             if (sortPreference.equals("0")) {
-                movieURL = "http://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=?";
+                movieURL = "http://api.themoviedb.org/3/discover/movie?sort_by=?&api_key=?";
                 builtUri = Uri.parse(movieURL).buildUpon()
+                        .appendQueryParameter("sort_by", sort_by_pop)
                         .appendQueryParameter("api_key", API_KEY).build();
             } else {
-                movieURL = "http://api.themoviedb.org/3/discover/movie?sort_by=vote_average.desc&api_key=?";
+                movieURL = "http://api.themoviedb.org/3/discover/movie?sort_by=?&api_key=?";
                 builtUri = Uri.parse(movieURL).buildUpon()
+                        .appendQueryParameter("sort_by", sort_by_top)
                         .appendQueryParameter("api_key", API_KEY).build();
             }
             URL url = new URL(builtUri.toString());
@@ -218,7 +220,7 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
         if (cVV.size() > 0) {
             ContentValues[] cvArray = new ContentValues[cVV.size()];
             cVV.toArray(cvArray);
-            getContext().getContentResolver().delete(MovieContract.TrailersEntry.CONTENT_URI, null, null);
+            //getContext().getContentResolver().delete(MovieContract.TrailersEntry.CONTENT_URI, null, null);
             getContext().getContentResolver().bulkInsert(MovieContract.TrailersEntry.CONTENT_URI, cvArray);
         }
         return;
@@ -242,7 +244,7 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
         if (cVV.size() > 0) {
             ContentValues[] cvArray = new ContentValues[cVV.size()];
             cVV.toArray(cvArray);
-            getContext().getContentResolver().delete(MovieContract.ReviewsEntry.CONTENT_URI, null, null);
+            //getContext().getContentResolver().delete(MovieContract.ReviewsEntry.CONTENT_URI, null, null);
             getContext().getContentResolver().bulkInsert(MovieContract.ReviewsEntry.CONTENT_URI, cvArray);
             Log.d(LOG_TAG, "Sync Complete. " + cVV.size() + " Inserted");
         }

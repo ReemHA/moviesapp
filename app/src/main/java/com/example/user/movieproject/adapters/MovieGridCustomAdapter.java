@@ -57,7 +57,6 @@ public class MovieGridCustomAdapter extends CursorAdapter {
                 .centerInside()
                 .tag(context)
                 .into(holder.movie_poster);
-
         return;
     }
 

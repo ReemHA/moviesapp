@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -49,27 +50,47 @@ public class MovieDescAdapter extends CursorAdapter {
         String releaseDate;
         String overview;
         int IS_FAVORITE;
-        if (Utility.getSortPreference(context).equals("0")) {
-            movie_id = cursor.getInt(cursor.getColumnIndex(MovieContract.MostPopMovieEntry.COLUMN_MOVIE_ID));
-            title = cursor.getString(cursor.getColumnIndex(MovieContract.MostPopMovieEntry.COLUMN_TITLE));
-            poster = cursor.getString(cursor.getColumnIndex(MovieContract.MostPopMovieEntry.COLUMN_POSTER_PATH));
-            rating = cursor.getDouble(cursor.getColumnIndex(MovieContract.MostPopMovieEntry.COLUMN_VOTE_AVG));
-            releaseDate = cursor.getString(cursor.getColumnIndex(MovieContract.MostPopMovieEntry.COLUMN_RELEASE_DATE));
-            overview = cursor.getString(cursor.getColumnIndex(MovieContract.MostPopMovieEntry.COLUMN_PLOT));
-            //IS_FAVORITE = cursor.getInt(cursor.getColumnIndex(MovieContract.MostPopMovieEntry.COLUMN_IS_FAVOURITE));
+        Button button = (Button) view.findViewById(R.id.addfav);
+        try {
+            if (Utility.getSortPreference(context).equals("0")) {
+                movie_id = cursor.getInt(cursor.getColumnIndex(MovieContract.MostPopMovieEntry.COLUMN_MOVIE_ID));
+                title = cursor.getString(cursor.getColumnIndex(MovieContract.MostPopMovieEntry.COLUMN_TITLE));
+                poster = cursor.getString(cursor.getColumnIndex(MovieContract.MostPopMovieEntry.COLUMN_POSTER_PATH));
+                rating = cursor.getDouble(cursor.getColumnIndex(MovieContract.MostPopMovieEntry.COLUMN_VOTE_AVG));
+                releaseDate = cursor.getString(cursor.getColumnIndex(MovieContract.MostPopMovieEntry.COLUMN_RELEASE_DATE));
+                overview = cursor.getString(cursor.getColumnIndex(MovieContract.MostPopMovieEntry.COLUMN_PLOT));
+                IS_FAVORITE = cursor.getInt(cursor.getColumnIndex(MovieContract.MostPopMovieEntry.COLUMN_IS_FAVOURITE));
+            } else {
+                movie_id = cursor.getInt(cursor.getColumnIndex(MovieContract.TopRatedMovieEntry.COLUMN_MOVIE_ID));
+                title = cursor.getString(cursor.getColumnIndex(MovieContract.TopRatedMovieEntry.COLUMN_TITLE));
+                poster = cursor.getString(cursor.getColumnIndex(MovieContract.TopRatedMovieEntry.COLUMN_POSTER_PATH));
+                rating = cursor.getDouble(cursor.getColumnIndex(MovieContract.TopRatedMovieEntry.COLUMN_VOTE_AVG));
+                releaseDate = cursor.getString(cursor.getColumnIndex(MovieContract.TopRatedMovieEntry.COLUMN_RELEASE_DATE));
+                overview = cursor.getString(cursor.getColumnIndex(MovieContract.TopRatedMovieEntry.COLUMN_PLOT));
+                IS_FAVORITE = cursor.getInt(cursor.getColumnIndex(MovieContract.TopRatedMovieEntry.COLUMN_IS_FAVOURITE));
+            }
+        } catch (IllegalStateException e) {
+            IS_FAVORITE = 1;
+            movie_id = cursor.getInt(cursor.getColumnIndex(MovieContract.FavouriteMoviesEntry.COLUMN_MOVIE_ID));
+            title = cursor.getString(cursor.getColumnIndex(MovieContract.FavouriteMoviesEntry.COLUMN_TITLE));
+            poster = cursor.getString(cursor.getColumnIndex(MovieContract.FavouriteMoviesEntry.COLUMN_POSTER_PATH));
+            rating = cursor.getDouble(cursor.getColumnIndex(MovieContract.FavouriteMoviesEntry.COLUMN_VOTE_AVG));
+            releaseDate = cursor.getString(cursor.getColumnIndex(MovieContract.FavouriteMoviesEntry.COLUMN_RELEASE_DATE));
+            overview = cursor.getString(cursor.getColumnIndex(MovieContract.FavouriteMoviesEntry.COLUMN_PLOT));
+            button.setEnabled(false);
 
+        }
 
+        if (IS_FAVORITE == 1) {
+            button.setText("REMOVE FROM FAVORITE");
+            button.setBackgroundColor(context.getResources().getColor(R.color.light_grey));
         } else {
-            movie_id = cursor.getInt(cursor.getColumnIndex(MovieContract.TopRatedMovieEntry.COLUMN_MOVIE_ID));
-            title = cursor.getString(cursor.getColumnIndex(MovieContract.TopRatedMovieEntry.COLUMN_TITLE));
-            poster = cursor.getString(cursor.getColumnIndex(MovieContract.TopRatedMovieEntry.COLUMN_POSTER_PATH));
-            rating = cursor.getDouble(cursor.getColumnIndex(MovieContract.TopRatedMovieEntry.COLUMN_VOTE_AVG));
-            releaseDate = cursor.getString(cursor.getColumnIndex(MovieContract.TopRatedMovieEntry.COLUMN_RELEASE_DATE));
-            overview = cursor.getString(cursor.getColumnIndex(MovieContract.TopRatedMovieEntry.COLUMN_PLOT));
-            //IS_FAVORITE = cursor.getInt(cursor.getColumnIndex(MovieContract.TopRatedMovieEntry.COLUMN_IS_FAVOURITE));
+            button.setText("ADD TO FAVORITE");
+            button.setBackgroundColor(context.getResources().getColor(R.color.light_teal));
         }
         Picasso.with(context)
                 .load(Uri.parse("http://image.tmdb.org/t/p/w185/" + poster).buildUpon().build())
+                .placeholder(R.drawable.images)
                 .resizeDimen(R.dimen.width_poster, R.dimen.height_poster)
                 .centerInside()
                 .tag(context)
@@ -80,9 +101,6 @@ public class MovieDescAdapter extends CursorAdapter {
         holder.date.setText(releaseDate);
         holder.plot.setText(overview);
 
-//        if (IS_FAVORITE == 0){
-//
-//        }
         return;
     }
 

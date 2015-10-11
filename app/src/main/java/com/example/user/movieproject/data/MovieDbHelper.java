@@ -10,7 +10,7 @@ import com.example.user.movieproject.controller.Utility;
  * Created by USER on 9/9/2015.
  */
 public class MovieDbHelper extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 1;
     static final String DATABASE_NAME = "movie.db";
     Context context;
     public MovieDbHelper(Context context) {
@@ -40,6 +40,7 @@ public class MovieDbHelper extends SQLiteOpenHelper {
                 MovieContract.TopRatedMovieEntry.COLUMN_VOTE_AVG + " REAL NOT NULL," +
                 MovieContract.TopRatedMovieEntry.COLUMN_RELEASE_DATE + " TEXT NOT NULL," +
                 MovieContract.TopRatedMovieEntry.COLUMN_IS_FAVOURITE + " INT);";
+
         final String SQL_CREATE_MOST_POP_MOVIE_TABLE = "CREATE TABLE " + MovieContract.MostPopMovieEntry.TABLE_NAME + "( "
                 + MovieContract.MostPopMovieEntry._ID + " INTEGER PRIMARY KEY, " +
                 MovieContract.MostPopMovieEntry.COLUMN_MOVIE_ID + " INT NOT NULL, " +
@@ -48,7 +49,7 @@ public class MovieDbHelper extends SQLiteOpenHelper {
                 MovieContract.MostPopMovieEntry.COLUMN_POSTER_PATH + " TEXT," +
                 MovieContract.MostPopMovieEntry.COLUMN_VOTE_AVG + " REAL NOT NULL," +
                 MovieContract.MostPopMovieEntry.COLUMN_RELEASE_DATE + " TEXT NOT NULL," +
-                MovieContract.MostPopMovieEntry.COLUMN_IS_FAVOURITE + " INT NOT NULL);";
+                MovieContract.MostPopMovieEntry.COLUMN_IS_FAVOURITE + " INT);";
 
         final String SQL_CREATE_FAV_MOVIE_TABLE = "CREATE TABLE " + MovieContract.FavouriteMoviesEntry.TABLE_NAME + "( "
                 + MovieContract.FavouriteMoviesEntry._ID + " INTEGER PRIMARY KEY, " +
@@ -57,7 +58,9 @@ public class MovieDbHelper extends SQLiteOpenHelper {
                 MovieContract.FavouriteMoviesEntry.COLUMN_PLOT + " TEXT NOT NULL," +
                 MovieContract.FavouriteMoviesEntry.COLUMN_POSTER_PATH + " TEXT," +
                 MovieContract.FavouriteMoviesEntry.COLUMN_VOTE_AVG + " REAL NOT NULL," +
-                MovieContract.FavouriteMoviesEntry.COLUMN_RELEASE_DATE + " TEXT NOT NULL);";
+                MovieContract.FavouriteMoviesEntry.COLUMN_RELEASE_DATE + " TEXT NOT NULL, "
+                + "UNIQUE (" + MovieContract.FavouriteMoviesEntry.COLUMN_MOVIE_ID + ") ON CONFLICT REPLACE);";
+
         final String SQL_CREATE_TRAILER_TABLE = "CREATE TABLE " + MovieContract.TrailersEntry.TABLE_NAME + "( "
                 + MovieContract.TrailersEntry._ID + " INTEGER PRIMARY KEY, " +
                 MovieContract.TrailersEntry.COLUMN_TRAILER_ID + " TEXT NOT NULL, " +

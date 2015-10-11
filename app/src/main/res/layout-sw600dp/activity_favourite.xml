@@ -5,23 +5,24 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="2"
-    android:divider="?android:dividerHorizontal"
     android:layout_marginLeft="@dimen/margin_left_right_tablet_Ui"
-    android:layout_marginRight="@dimen/margin_left_right_tablet_Ui">
+    android:layout_marginRight="@dimen/margin_left_right_tablet_Ui"
+    android:divider="?android:dividerHorizontal"
+    android:weightSum="2">
 
     <fragment
-        android:id="@+id/fragment_movies_list"
-        android:name="com.example.user.movieproject.controller.MovieGridFragment"
-        android:layout_width="0dp"
+        android:id="@+id/fragment_fav_list"
+        android:name="com.example.user.movieproject.controller.FavouriteActivityFragment"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        tools:layout="@layout/fragment_main"/>
+        tools:layout="@layout/fragment_favourite"/>
 
     <FrameLayout
         android:id="@+id/movie_detail_container"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1">
     </FrameLayout>
+
 </LinearLayout>

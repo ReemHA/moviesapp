@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ListView;
 
 import com.example.user.movieproject.R;
 import com.example.user.movieproject.adapters.MovieGridCustomAdapter;
@@ -25,11 +26,11 @@ import com.example.user.movieproject.sync.MovieSyncAdapter;
  */
 public class MovieGridFragment extends Fragment implements android.support.v4.app.LoaderManager.LoaderCallbacks<Cursor> {
     private static MovieGridCustomAdapter movieAdapter;
-    String pref;
     public static final int MOVIE_LOADER = 0;
     public static GridView grid;
     public static final String LOG_TAG = MovieGridFragment.class.getSimpleName();
-
+    private int mPosition = GridView.INVALID_POSITION;
+    private static final String SELECTED_KEY = "selected_position";
     public MovieGridFragment() {
     }
 
@@ -49,17 +50,26 @@ public class MovieGridFragment extends Fragment implements android.support.v4.ap
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        if (mPosition != ListView.INVALID_POSITION) {
+            outState.putInt(SELECTED_KEY, mPosition);
+        }
+        super.onSaveInstanceState(outState);
+
+    }
 
     @Override
     public void onStart() {
         super.onStart();
-        updateMovies();
+        //updateMovies();
     }
 
-    void onPreferenceChange(){
+    void onPreferenceChange() {
         updateMovies();
         getLoaderManager().restartLoader(MOVIE_LOADER, null, this);
     }
+
     private void updateMovies() {
         MovieSyncAdapter.syncImmediately(getActivity());
     }
@@ -72,6 +82,10 @@ public class MovieGridFragment extends Fragment implements android.support.v4.ap
         movieAdapter = new MovieGridCustomAdapter(getActivity(), null, 0);
         grid.setAdapter(movieAdapter);
         grid.setOnItemClickListener(gridItemClickListener);
+
+        if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
+            mPosition = savedInstanceState.getInt(SELECTED_KEY);
+        }
         return rootView;
     }
 
@@ -79,24 +93,16 @@ public class MovieGridFragment extends Fragment implements android.support.v4.ap
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Cursor cursor = (Cursor) parent.getItemAtPosition(position);
-            if (cursor != null){
-               if(Utility.getSortPreference(getActivity()).equals("0")){
-                   ((Callback) getActivity())
-                           .OnItemClick(MovieContract.MostPopMovieEntry.buildMovieWithId(id), LOG_TAG);
-               }else{
-                   ((Callback) getActivity())
-                           .OnItemClick(MovieContract.TopRatedMovieEntry.buildMovieWithId(id), LOG_TAG);
-               }
+            if (cursor != null) {
+                if (Utility.getSortPreference(getActivity()).equals("0")) {
+                    ((Callback) getActivity())
+                            .OnItemClick(MovieContract.MostPopMovieEntry.buildMovieWithId(id), LOG_TAG);
+                } else {
+                    ((Callback) getActivity())
+                            .OnItemClick(MovieContract.TopRatedMovieEntry.buildMovieWithId(id), LOG_TAG);
+                }
             }
-            /*Intent intent = new Intent(view.getContext(), DetailActivity.class);
-            Movie movieGrid = adapter.getItem(position);
-            intent.putExtra("movie_id", movieGrid.getId());
-            intent.putExtra("movie_img", movieGrid.getImage());
-            intent.putExtra("movie_title", movieGrid.getTitle());
-            intent.putExtra("movie_rating", movieGrid.getRating());
-            intent.putExtra("movie_plot", movieGrid.getPlot());
-            intent.putExtra("movie_date", movieGrid.getRelease_date());
-            startActivity(intent);*/
+            mPosition = position;
         }
     };
 
@@ -145,12 +151,14 @@ public class MovieGridFragment extends Fragment implements android.support.v4.ap
         Log.d(LOG_TAG, data.getCount() + " rows loaded");
         if (data != null) {
             Log.d(LOG_TAG, "Data received onLoadfinished is no null");
-        }else{
+        } else {
             Log.d(LOG_TAG, "Data received onLoadfinished is null");
         }
         movieAdapter.swapCursor(data);
+        if (mPosition != ListView.INVALID_POSITION) {
+            grid.smoothScrollToPosition(mPosition);
+        }
     }
-
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         Log.d(LOG_TAG, "Loader is reset");

@@ -32,6 +32,12 @@ public class FavouriteActivityFragment extends Fragment implements android.suppo
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        getLoaderManager().restartLoader(FAV_MOVIES_LOADER, null, this);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_favourite, container, false);

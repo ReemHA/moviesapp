@@ -23,5 +23,6 @@
     <dimen name="margin_trailer_item">30dp</dimen>
     <dimen name="margin_line_below">85dp</dimen>
     <dimen name="trailer_padding">2dp</dimen>
+    <dimen name="margin_left_right_tablet_Ui">-10dp</dimen>
 
 </resources>

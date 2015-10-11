@@ -4,18 +4,31 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.user.movieproject.R;
 
 public class FavouriteActivity extends AppCompatActivity implements Callback {
+    static boolean mTwoPane;
+    private static final String DETAILFRAGMENT_TAG = "DFTAG";
+    static final String LOG_TAG = FavouriteActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favourite);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (findViewById(R.id.movie_detail_container) != null) {
+            mTwoPane = true;
+            if (savedInstanceState != null) {
+                return;
+            }
+        } else {
+            mTwoPane = false;
+            getSupportActionBar().setElevation(0x0.0p0f);
+        }
     }
 
 
@@ -46,10 +59,22 @@ public class FavouriteActivity extends AppCompatActivity implements Callback {
 
     @Override
     public void OnItemClick(Uri contentUri, String ClassName) {
-        Intent intent = new Intent(this, DetailActivity.class)
-                .setData(contentUri);
-        intent.putExtra("className", ClassName);
-        startActivity(intent);
+        if (mTwoPane) {
+            Log.d(LOG_TAG, "in a mTwoPane");
+            Bundle args = new Bundle();
+            args.putParcelable(DetailFragment.MOVIE_URI_WITH_ID, contentUri);
+            args.putString("className", LOG_TAG);
+            DetailFragment detailFragment = new DetailFragment();
+            detailFragment.setArguments(args);
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.movie_detail_container, detailFragment, DETAILFRAGMENT_TAG)
+                    .commit();
+        } else {
+            Intent intent = new Intent(this, DetailActivity.class)
+                    .setData(contentUri);
+            intent.putExtra("className", LOG_TAG);
+            startActivity(intent);
+        }
     }
 
 }

@@ -10,7 +10,7 @@ import com.example.user.movieproject.controller.Utility;
  * Created by USER on 9/9/2015.
  */
 public class MovieDbHelper extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 3;
     static final String DATABASE_NAME = "movie.db";
     Context context;
     public MovieDbHelper(Context context) {
